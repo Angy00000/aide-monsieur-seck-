@@ -1,0 +1,8 @@
+{
+  "name": "aide-monsieur-seck",
+  "private": true,
+  "description": "Cotisation des anciens élèves du Centre Saint Jean Baptiste pour Monsieur Seck",
+  "dependencies": {
+    "@neondatabase/serverless": "0.10.4"
+  }
+}
