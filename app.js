@@ -40,18 +40,21 @@
 
   function heroHTML() {
     var s = data.settings, t = totals, h = '';
-    h += '<header class="hero"><div class="wrap">';
+    var obj = +s.objectif || 0, pct = obj > 0 ? Math.min(100, Math.round(t.recu / obj * 100)) : 0;
+    h += '<header class="hero"><div class="glow" aria-hidden="true"></div><div class="wrap">';
     h += '<div class="eyebrow">Anciens élèves · Centre Saint Jean Baptiste</div>';
-    h += '<h1>Pour Monsieur Seck</h1>';
-    h += '<p class="lead">Une cotisation libre pour soutenir notre ancien formateur. Chacun donne selon ses moyens : c\'est le geste du cœur qui compte.</p>';
-    h += '<div class="total"><span class="lbl">Total reçu</span><span class="amt">' + fcfa(t.recu) + '</span></div>';
-    if (+s.objectif > 0) { var pct = Math.min(100, Math.round(t.recu / s.objectif * 100)); h += '<div class="bar" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100"><span style="width:' + pct + '%"></span></div><div class="facts"><span><b>' + pct + ' %</b> de l\'objectif de ' + fcfa(s.objectif) + '</span></div>'; }
-    h += '<div class="facts"><span><b>' + t.nRecu + '</b> contribution' + (t.nRecu > 1 ? 's' : '') + ' reçue' + (t.nRecu > 1 ? 's' : '') + '</span>';
-    if (t.nPromis) h += '<span><b>' + t.nPromis + '</b> promesse' + (t.nPromis > 1 ? 's' : '') + (t.promis != null ? ' (' + fcfa(t.promis) + ')' : '') + '</span>';
-    if (s.dateLimite) { var days = Math.ceil((new Date(s.dateLimite + 'T23:59:59') - new Date()) / 86400000); h += '<span>Clôture le <b>' + fdate(s.dateLimite) + '</b>' + (days >= 0 ? ' · J-' + days : ' · terminée') + '</span>'; }
-    h += '</div>';
+    h += '<h1>Merci,<br><em>Monsieur Seck.</em></h1>';
+    h += '<p class="lead">Il nous a formés avec patience, rigueur et cœur. Aujourd\'hui, c\'est à nous, ses anciens élèves, de lui rendre un peu de ce qu\'il nous a donné.</p>';
+    h += '<div class="gauge"><div class="gauge-top"><span class="amt">' + fcfa(t.recu) + '</span>' + (obj > 0 ? '<span class="of">sur ' + fcfa(obj) + '</span>' : '') + '</div>';
+    if (obj > 0) h += '<div class="bar" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100" aria-label="Progression vers l\'objectif"><span style="width:' + Math.max(pct, 2) + '%"></span></div><div class="pct"><b>' + pct + '\u00a0%</b> du chemin parcouru' + (pct >= 100 ? ' · objectif atteint, merci à tous ❤️' : '') + '</div>';
+    h += '</div><div class="facts"><span class="chip"><b>' + t.nRecu + '</b> ancien' + (t.nRecu > 1 ? 's ont' : ' a') + ' déjà donné</span>';
+    if (t.nPromis) h += '<span class="chip"><b>' + t.nPromis + '</b> promesse' + (t.nPromis > 1 ? 's' : '') + (t.promis != null ? ' (' + fcfa(t.promis) + ')' : '') + '</span>';
+    if (s.dateLimite) { var days = Math.ceil((new Date(s.dateLimite + 'T23:59:59') - new Date()) / 86400000); h += '<span class="chip">' + (days >= 0 ? 'Plus que <b>' + days + '</b> jour' + (days > 1 ? 's' : '') : 'Cotisation <b>terminée</b>') + '</span>'; }
+    h += '</div><a class="cta" href="#h-pay">Je participe</a>';
     if (admin) h += '<div class="adminhint">Mode organisateur · <button class="linkbtn" style="color:inherit" id="logout">Se déconnecter</button></div>';
-    return h + '</div></header>';
+    h += '</div></header>';
+    h += '<div class="wrap"><blockquote class="pledge"><p>« Le savoir qu\'il nous a transmis ne s\'est jamais arrêté. Notre reconnaissance non plus. »</p><span>Chaque geste compte, quel que soit le montant. 🤲</span></blockquote></div>';
+    return h;
   }
 
   function payHTML() {
